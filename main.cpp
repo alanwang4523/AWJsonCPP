@@ -1,21 +1,37 @@
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 #include "json.h"
 
+/**
+ * 测试：解析 json 字符串
+ */
 void testParseJsonStr();
 
+/**
+ * 测试：由 json object 生成 json 字符串
+ */
 void testGenerateJsonStr();
+
+/**
+ * 测试：生成 json 字符串 到文件
+ */
+void testGenerateJsonStrToFile();
 
 int main() {
     std::cout << "<-----JsonCPPDemo---->" << std::endl;
 
     testParseJsonStr();
     testGenerateJsonStr();
+    testGenerateJsonStrToFile();
 
     return 0;
 }
 
+/**
+ * 测试：解析 json 字符串
+ */
 void testParseJsonStr() {
     std::cout << "<-----JsonCPPDemo---->testParseJsonStr()--->>" << std::endl;
 
@@ -87,7 +103,9 @@ void testParseJsonStr() {
     delete reader;
 }
 
-
+/**
+ * 测试：由 json object 生成 json 字符串
+ */
 void testGenerateJsonStr() {
     std::cout << "<-----JsonCPPDemo---->testGenerateJsonStr()--->>" << std::endl;
 
@@ -110,6 +128,37 @@ void testGenerateJsonStr() {
 
     streamWriter->write(jsonObjRoot, &os);
     std::string jsonStr = os.str();
+    delete streamWriter;
 
     std::cout << "Generate Json:\n" << jsonStr << std::endl;
+}
+
+/**
+ * 测试：生成 json 字符串 到文件
+ */
+void testGenerateJsonStrToFile() {
+    std::cout << "<-----JsonCPPDemo---->testGenerateJsonStrToFile()--->>" << std::endl;
+
+    Json::Value jsonObjRoot;
+    jsonObjRoot["Name"] = "AlanWang";
+    jsonObjRoot["Email"] = "alanwang4523@gmail.com";
+    jsonObjRoot["Age"] = 27;
+    jsonObjRoot["Weight"] = 66.6f;
+    jsonObjRoot["isTest"] = true;
+
+    Json::Value jsonObjLanguage;
+    jsonObjLanguage[0] = "Java";
+    jsonObjLanguage[1] = "C/C++";
+    jsonObjLanguage[2] = "Python";
+    jsonObjRoot["Language"] = jsonObjLanguage;
+
+    Json::StreamWriterBuilder writerBuilder;
+    Json::StreamWriter * streamWriter = writerBuilder.newStreamWriter();
+    std::ofstream os;
+
+    os.open("test.json");
+    streamWriter->write(jsonObjRoot, &os);
+    os.close();
+
+    delete streamWriter;
 }
