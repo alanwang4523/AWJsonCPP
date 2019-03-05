@@ -3,6 +3,7 @@ project(JsonCPPDemo)
 
 set(CMAKE_CXX_STANDARD 11)
 
+include_directories(./jsoncpp/)
 include_directories(./jsoncpp/json/)
 
 file(GLOB CPP_FILES_IN_LIB_JSON "./jsoncpp/lib_json/*.cpp")
