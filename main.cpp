@@ -1,18 +1,24 @@
 #include <iostream>
+#include <sstream>
 
 #include "json.h"
 
 void testParseJsonStr();
 
+void testGenerateJsonStr();
+
 int main() {
     std::cout << "<-----JsonCPPDemo---->" << std::endl;
 
     testParseJsonStr();
+    testGenerateJsonStr();
 
     return 0;
 }
 
 void testParseJsonStr() {
+    std::cout << "<-----JsonCPPDemo---->testParseJsonStr()--->>" << std::endl;
+
     const char * jsonStr = "{\n"
             "  \"Name\": \"AlanWang\",\n"
             "  \"Email\": \"alanwang4523@gmail.com\",\n"
@@ -79,5 +85,31 @@ void testParseJsonStr() {
     }
 
     delete reader;
+}
 
+
+void testGenerateJsonStr() {
+    std::cout << "<-----JsonCPPDemo---->testGenerateJsonStr()--->>" << std::endl;
+
+    Json::Value jsonObjRoot;
+    jsonObjRoot["Name"] = "AlanWang";
+    jsonObjRoot["Email"] = "alanwang4523@gmail.com";
+    jsonObjRoot["Age"] = 27;
+    jsonObjRoot["Weight"] = 66.6f;
+    jsonObjRoot["isTest"] = true;
+
+    Json::Value jsonObjLanguage;
+    jsonObjLanguage[0] = "Java";
+    jsonObjLanguage[1] = "C/C++";
+    jsonObjLanguage[2] = "Python";
+    jsonObjRoot["Language"] = jsonObjLanguage;
+
+    Json::StreamWriterBuilder writerBuilder;
+    Json::StreamWriter * streamWriter = writerBuilder.newStreamWriter();
+    std::ostringstream os;
+
+    streamWriter->write(jsonObjRoot, &os);
+    std::string jsonStr = os.str();
+
+    std::cout << "Generate Json:\n" << jsonStr << std::endl;
 }
