@@ -38,14 +38,20 @@ void testGenerateJsonStrToFile();
  */
 void testDataObjectToJsonStr();
 
+/**
+ * 从 json 字符串中解析出数据对象
+ */
+void testParseObjectFromJsonStr();
+
 int main() {
     std::cout << "<-----JsonCPPDemo---->" << std::endl;
 
     testParseJsonStr();
     testGenerateJsonStr();
     testGenerateJsonStrToFile();
-    testDataObjectToJsonStr();
 
+    testDataObjectToJsonStr();
+    testParseObjectFromJsonStr();
 
     return 0;
 }
@@ -220,4 +226,37 @@ void testDataObjectToJsonStr() {
     std::string jsonStr = funJsonToString(workExperience.toJsonObject());
 
     std::cout << "Json:\n" << jsonStr << std::endl;
+}
+
+
+/**
+ * 从 json 字符串中解析出数据对象
+ */
+void testParseObjectFromJsonStr() {
+    std::cout << "<-----JsonCPPDemo---->testParseObjectFromJsonStr()--->>" << std::endl;
+
+    const char * jsonStr = "{\n"
+            "\t\"CompanyName\" : \"Google\",\n"
+            "\t\"ProjectList\" : \n"
+            "\t[\n"
+            "\t\t\"Project_01\",\n"
+            "\t\t\"Project_02\"\n"
+            "\t],\n"
+            "\t\"Role\" : \"Engineer\",\n"
+            "\t\"TimeInMonths\" : 26\n"
+            "}";
+    WorkExperience * workExperience = WorkExperience::CreateFromJsonStr(jsonStr);
+    if (nullptr != workExperience) {
+        std::cout << "getCompanyName = " << workExperience->getCompanyName() << std::endl;
+        std::cout << "getRole = " << workExperience->getRole() << std::endl;
+        std::cout << "getTimeInMonths = " << workExperience->getTimeInMonths() << std::endl;
+
+        vector<std::string> projectList = workExperience->getProjectList();
+        for (int i = 0; i < projectList.size(); ++i) {
+            std::cout << "project = " << projectList.at(i) << std::endl;
+        }
+    } else {
+        std::cout << "Json parse error! " <<  std::endl;
+    }
+
 }

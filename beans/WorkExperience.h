@@ -12,7 +12,15 @@
 
 using namespace std;
 
+#define KEY_COMPANY_NAME "CompanyName"
+#define KEY_ROLE "Role"
+#define KEY_TIME_IN_MONTHS "TimeInMonths"
+#define KEY_PROJECT_LIST "ProjectList"
+
 class WorkExperience {
+public:
+    static WorkExperience * CreateFromJsonStr(const char * jsonStr);
+
 public:
     WorkExperience();
     ~WorkExperience();
