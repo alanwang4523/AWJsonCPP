@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include "json.h"
+#include "WorkExperience.h"
 
 /**
  * 测试：解析 json 字符串
@@ -19,12 +20,19 @@ void testGenerateJsonStr();
  */
 void testGenerateJsonStrToFile();
 
+/**
+ * 将数据对象转成 json 字符串
+ */
+void testDataObjectToJsonStr();
+
 int main() {
     std::cout << "<-----JsonCPPDemo---->" << std::endl;
 
     testParseJsonStr();
     testGenerateJsonStr();
     testGenerateJsonStrToFile();
+    testDataObjectToJsonStr();
+
 
     return 0;
 }
@@ -161,4 +169,28 @@ void testGenerateJsonStrToFile() {
     os.close();
 
     delete streamWriter;
+}
+
+/**
+ * 将数据对象转成 json 字符串
+ */
+void testDataObjectToJsonStr() {
+    std::cout << "<-----JsonCPPDemo---->testDataObjectToJsonStr()--->>" << std::endl;
+    WorkExperience workExperience;
+    workExperience.setCompanyName("Google");
+    workExperience.addProject("Project_01");
+    workExperience.addProject("Project_02");
+    workExperience.setRole("Engineer");
+    workExperience.setTimeInMonths(26);
+
+
+    Json::StreamWriterBuilder writerBuilder;
+    Json::StreamWriter * streamWriter = writerBuilder.newStreamWriter();
+    std::ostringstream os;
+
+    streamWriter->write(workExperience.toJsonObject(), &os);
+    std::string jsonStr = os.str();
+    delete streamWriter;
+
+    std::cout << "Json:\n" << jsonStr << std::endl;
 }
