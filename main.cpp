@@ -1,6 +1,12 @@
 #include <iostream>
 
+void testParseJsonStr();
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    std::cout << "<-----JsonCPPDemo---->" << std::endl;
+
+    testParseJsonStr();
+
     return 0;
 }
+
