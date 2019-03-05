@@ -6,6 +6,19 @@
 #include "WorkExperience.h"
 
 /**
+ * 将 json 转成字符串并输出
+ * @param jsonRoot
+ */
+std::string funJsonToString(Json::Value jsonRoot);
+
+/**
+ * 将 json 转成字符串并保存到文件
+ * @param jsonRoot
+ * @param filePath
+ */
+void funJsonToFile(Json::Value jsonRoot, std::string filePath);
+
+/**
  * 测试：解析 json 字符串
  */
 void testParseJsonStr();
@@ -35,6 +48,41 @@ int main() {
 
 
     return 0;
+}
+
+
+/**
+ * 将 json 转成字符串并输出
+ * @param jsonRoot
+ */
+std::string funJsonToString(Json::Value jsonRoot) {
+    Json::StreamWriterBuilder writerBuilder;
+    Json::StreamWriter * streamWriter = writerBuilder.newStreamWriter();
+    std::ostringstream os;
+
+    streamWriter->write(jsonRoot, &os);
+    std::string jsonStr = os.str();
+    delete streamWriter;
+
+    return jsonStr;
+}
+
+/**
+ * 将 json 转成字符串并保存到文件
+ * @param jsonRoot
+ * @param filePath
+ */
+void funJsonToFile(Json::Value jsonRoot, std::string filePath) {
+
+    Json::StreamWriterBuilder writerBuilder;
+    Json::StreamWriter * streamWriter = writerBuilder.newStreamWriter();
+    std::ofstream os;
+
+    os.open(filePath);
+    streamWriter->write(jsonRoot, &os);
+    os.close();
+
+    delete streamWriter;
 }
 
 /**
@@ -130,13 +178,7 @@ void testGenerateJsonStr() {
     jsonObjLanguage[2] = "Python";
     jsonObjRoot["Language"] = jsonObjLanguage;
 
-    Json::StreamWriterBuilder writerBuilder;
-    Json::StreamWriter * streamWriter = writerBuilder.newStreamWriter();
-    std::ostringstream os;
-
-    streamWriter->write(jsonObjRoot, &os);
-    std::string jsonStr = os.str();
-    delete streamWriter;
+    std::string jsonStr = funJsonToString(jsonObjRoot);
 
     std::cout << "Generate Json:\n" << jsonStr << std::endl;
 }
@@ -160,15 +202,7 @@ void testGenerateJsonStrToFile() {
     jsonObjLanguage[2] = "Python";
     jsonObjRoot["Language"] = jsonObjLanguage;
 
-    Json::StreamWriterBuilder writerBuilder;
-    Json::StreamWriter * streamWriter = writerBuilder.newStreamWriter();
-    std::ofstream os;
-
-    os.open("test.json");
-    streamWriter->write(jsonObjRoot, &os);
-    os.close();
-
-    delete streamWriter;
+    funJsonToFile(jsonObjRoot, "test.json");
 }
 
 /**
@@ -183,14 +217,7 @@ void testDataObjectToJsonStr() {
     workExperience.setRole("Engineer");
     workExperience.setTimeInMonths(26);
 
-
-    Json::StreamWriterBuilder writerBuilder;
-    Json::StreamWriter * streamWriter = writerBuilder.newStreamWriter();
-    std::ostringstream os;
-
-    streamWriter->write(workExperience.toJsonObject(), &os);
-    std::string jsonStr = os.str();
-    delete streamWriter;
+    std::string jsonStr = funJsonToString(workExperience.toJsonObject());
 
     std::cout << "Json:\n" << jsonStr << std::endl;
 }
