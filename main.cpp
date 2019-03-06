@@ -253,8 +253,9 @@ void testParseObjectFromJsonStr() {
             "\t\"Role\" : \"Engineer\",\n"
             "\t\"TimeInMonths\" : 26\n"
             "}";
-    WorkExperience * workExperience = WorkExperience::CreateFromJsonStr(jsonStr);
-    if (nullptr != workExperience) {
+    WorkExperience * workExperience = new WorkExperience();
+    int ret = WorkExperience::CreateFromJsonStr(workExperience, jsonStr);
+    if (0 == ret) {
         std::cout << "getCompanyName = " << workExperience->getCompanyName() << std::endl;
         std::cout << "getRole = " << workExperience->getRole() << std::endl;
         std::cout << "getTimeInMonths = " << workExperience->getTimeInMonths() << std::endl;

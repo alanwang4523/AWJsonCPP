@@ -5,9 +5,9 @@
 #include "WorkExperience.h"
 
 
-WorkExperience* WorkExperience::CreateFromJsonStr(const char *jsonStr) {
-    WorkExperience * workExperience = nullptr;
+int WorkExperience::CreateFromJsonStr(WorkExperience * workExperience, const char *jsonStr) {
 
+    int errorCode = 0;
     Json::CharReaderBuilder builder;
     Json::CharReader * reader = builder.newCharReader();
     Json::Value jsonRoot;
@@ -15,19 +15,24 @@ WorkExperience* WorkExperience::CreateFromJsonStr(const char *jsonStr) {
 
     //从字符串中读取数据
     if (reader->parse(jsonStr, jsonStr + strlen(jsonStr), &jsonRoot, &errs)) {
-        workExperience = new WorkExperience();
-        workExperience->setCompanyName(jsonRoot[KEY_COMPANY_NAME].asString());
-        workExperience->setRole(jsonRoot[KEY_ROLE].asString());
-        workExperience->setTimeInMonths(jsonRoot[KEY_TIME_IN_MONTHS].asInt());
-
-        // 解析数组
-        Json::Value jsonProjectList= jsonRoot[KEY_PROJECT_LIST];
-        for (int i = 0; i < jsonProjectList.size(); ++i) {
-            workExperience->addProject(jsonProjectList[i].asString());
-        }
+        errorCode = WorkExperience::CreateFromJsonValue(workExperience, jsonRoot);
     }
+    delete reader;
 
-    return workExperience;
+    return errorCode;
+}
+
+int WorkExperience::CreateFromJsonValue(WorkExperience * workExperience, Json::Value jsonValue) {
+    workExperience->setCompanyName(jsonValue[KEY_COMPANY_NAME].asString());
+    workExperience->setRole(jsonValue[KEY_ROLE].asString());
+    workExperience->setTimeInMonths(jsonValue[KEY_TIME_IN_MONTHS].asInt());
+
+    // 解析数组
+    Json::Value jsonProjectList= jsonValue[KEY_PROJECT_LIST];
+    for (int i = 0; i < jsonProjectList.size(); ++i) {
+        workExperience->addProject(jsonProjectList[i].asString());
+    }
+    return 0;
 }
 
 WorkExperience::WorkExperience() {

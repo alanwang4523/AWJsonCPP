@@ -19,7 +19,8 @@ using namespace std;
 
 class WorkExperience {
 public:
-    static WorkExperience * CreateFromJsonStr(const char * jsonStr);
+    static int CreateFromJsonStr(WorkExperience * workExperience, const char * jsonStr);
+    static int CreateFromJsonValue(WorkExperience * workExperience, Json::Value jsonValue);
 
 public:
     WorkExperience();
