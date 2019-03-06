@@ -4,6 +4,32 @@
 
 #include "WorkerInfo.h"
 
+int WorkerInfo::CreateFromJsonStr(WorkerInfo * workerInfo, const char *jsonStr) {
+
+    Json::CharReaderBuilder builder;
+    Json::CharReader * reader = builder.newCharReader();
+    Json::Value jsonRoot;
+    JSONCPP_STRING errs;
+
+    //从字符串中读取数据
+    if (reader->parse(jsonStr, jsonStr + strlen(jsonStr), &jsonRoot, &errs)) {
+        workerInfo->name = jsonRoot[KEY_NAME].asString();
+        workerInfo->email = jsonRoot[KEY_EMAIL].asString();
+        workerInfo->age = jsonRoot[KEY_AGE].asInt();
+
+        // 解析数组
+        Json::Value jsonExperienceList= jsonRoot[KEY_EXPERIENCE_LIST];
+        for (int i = 0; i < jsonExperienceList.size(); ++i) {
+            WorkExperience workExperience ;
+            WorkExperience::CreateFromJsonValue(&workExperience, jsonExperienceList[i]);
+            workerInfo->addExperience(workExperience);
+        }
+
+        delete reader;
+    }
+    return 0;
+}
+
 WorkerInfo::WorkerInfo() {
 
 }

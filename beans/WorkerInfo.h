@@ -19,6 +19,9 @@ using namespace std;
 
 class WorkerInfo {
 public:
+    static int CreateFromJsonStr(WorkerInfo * workerInfo, const char *jsonStr);
+
+public:
     WorkerInfo();
     ~WorkerInfo();
 

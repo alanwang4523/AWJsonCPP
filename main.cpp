@@ -40,7 +40,7 @@ void testGenerateJsonStrToFile();
 void testDataObjectToJsonStr();
 
 /**
- * 从 json 字符串中解析出数据对象
+ * 测试从 json 字符串中解析出数据对象
  */
 void testParseObjectFromJsonStr();
 
@@ -48,6 +48,11 @@ void testParseObjectFromJsonStr();
  * 测试将复杂对象转成 json 字符串
  */
 void testComplexObjectToJsonStr();
+
+/**
+ * 测试从 json 字符串中解析出复杂的数据对象
+ */
+void testParseComplexObjectFromJsonStr();
 
 int main() {
     std::cout << "<-----JsonCPPDemo---->" << std::endl;
@@ -60,6 +65,7 @@ int main() {
     testParseObjectFromJsonStr();
 
     testComplexObjectToJsonStr();
+    testParseComplexObjectFromJsonStr();
 
     return 0;
 }
@@ -332,4 +338,63 @@ void testComplexObjectToJsonStr() {
     }
 
      */
+}
+
+/**
+ * 从 json 字符串中解析出复杂的数据对象
+ */
+void testParseComplexObjectFromJsonStr() {
+    std::cout << "<-----JsonCPPDemo---->testParseComplexObjectFromJsonStr()--->>" << std::endl;
+
+    const char * jsonStr = "{\n"
+            "        \"Age\" : 27,\n"
+            "        \"Email\" : \"alanwang4523@gmail.com\",\n"
+            "        \"ExperienceList\" :\n"
+            "        [\n"
+            "            {\n"
+            "                \"CompanyName\" : \"Google\",\n"
+            "                \"ProjectList\" :\n"
+            "                [\n"
+            "                    \"Project_01\",\n"
+            "                    \"Project_02\"\n"
+            "                ],\n"
+            "                \"Role\" : \"Engineer\",\n"
+            "                \"TimeInMonths\" : 26\n"
+            "            },\n"
+            "            {\n"
+            "                \"CompanyName\" : \"FaceBook\",\n"
+            "                \"ProjectList\" :\n"
+            "                [\n"
+            "                    \"Project_01\"\n"
+            "                ],\n"
+            "                \"Role\" : \"Leader\",\n"
+            "                \"TimeInMonths\" : 20\n"
+            "            }\n"
+            "        ],\n"
+            "        \"Name\" : \"Alan\"\n"
+            "    }";
+
+    WorkerInfo workerInfo;
+    int ret = WorkerInfo::CreateFromJsonStr(&workerInfo, jsonStr);
+    if (0 == ret) {
+        std::cout << "getName = " << workerInfo.getName() << std::endl;
+        std::cout << "getEmail = " << workerInfo.getEmail() << std::endl;
+        std::cout << "getAge = " << workerInfo.getAge() << std::endl;
+
+        vector<WorkExperience> experienceList = workerInfo.getExperienceList();
+        for (int i = 0; i < experienceList.size(); ++i) {
+            std::cout << "WorkExperience[" << i << "]--->>" << std::endl;
+            WorkExperience workExperience = experienceList.at(i);
+            std::cout << "getCompanyName = " << workExperience.getCompanyName() << std::endl;
+            std::cout << "getRole = " << workExperience.getRole() << std::endl;
+            std::cout << "getTimeInMonths = " << workExperience.getTimeInMonths() << std::endl;
+
+            vector<std::string> projectList = workExperience.getProjectList();
+            for (int i = 0; i < projectList.size(); ++i) {
+                std::cout << "project = " << projectList.at(i) << std::endl;
+            }
+        }
+    } else {
+        std::cout << "Json parse error! " <<  std::endl;
+    }
 }
